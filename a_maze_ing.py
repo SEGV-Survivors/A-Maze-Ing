@@ -80,7 +80,7 @@ main_art: List[str] = [
 ]
 
 
-def a_maz_ing(stdscr: curses.window, config_file: str) -> None:
+def a_maz_ing(stdscr: curses.window, gen_maze: MazeGenerator) -> None:
     """
     Run one full maze session: generate,
     display, and handle menu interactions.
@@ -92,7 +92,6 @@ def a_maz_ing(stdscr: curses.window, config_file: str) -> None:
         stdscr: The root curses window.
         config_file: Path to the maze configuration file.
     """
-    gen_maze = MazeGenerator(config_file, stdscr)
     play_mode = MazePlayer(gen_maze, stdscr)
 
     gen_maze.generate_maze(visualizing=True)
@@ -150,10 +149,12 @@ def start_app(stdscr: curses.window, config_file: str) -> None:
     curses.init_pair(101, curses.COLOR_WHITE, -1)
     curses.init_pair(102, curses.COLOR_CYAN, -1)
 
+    gen_maze = MazeGenerator(config_file, stdscr)
     intro(stdscr)
 
     while True:
-        a_maz_ing(stdscr, config_file)
+        a_maz_ing(stdscr, gen_maze)
+        gen_maze = MazeGenerator(config_file, stdscr)
 
 
 def main() -> None:
